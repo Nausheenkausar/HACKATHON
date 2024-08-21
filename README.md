@@ -59,6 +59,7 @@ Satellite searching
             background: #e0e0e0;
             padding: 10px;
             border-radius: 4px;
+            text-align: left;
         }
     </style>
 </head>
@@ -68,14 +69,14 @@ Satellite searching
     <img src="spaceimage.jpg" style="width: 800px; height: 600px;">
     
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Enter Satellite Catalogue no...">
+        <input type="text" id="searchInput" placeholder="Enter Satellite Catalog Number...">
         <button onclick="searchSatellite()">Search</button>
     </div>
     <div id="results"></div>
 
     <script>
         function searchSatellite() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.trim();
             const url = `https://celestrak.com/NORAD/elements/gp.php?CATNR=${query}`;
 
             fetch(url)
@@ -102,21 +103,32 @@ Satellite searching
                 const tle2 = lines[2].trim();
 
                 const satelliteInfo = `
-                    <h2>${name}</h2>
-                    <p>TLE Line 1: ${tle1}</p>
-                    <p>TLE Line 2: ${tle2}</p>
+                    <h2>Satellite Name: ${name}</h2>
+                    <p><strong>Two-Line Element Set (TLE):</strong></p>
+                    <p><strong>TLE Line 1:</strong> ${tle1}</p>
+                    <p><strong>TLE Line 2:</strong> ${tle2}</p>
+                    <p><strong>Key Orbital Elements:</strong></p>
+                    <ul>
+                        <li><strong>Inclination:</strong> ${getTLEPart(tle2, 8, 16)} degrees</li>
+                        <li><strong>Right Ascension of Ascending Node:</strong> ${getTLEPart(tle2, 17, 25)} degrees</li>
+                        <li><strong>Eccentricity:</strong> 0.${getTLEPart(tle2, 26, 33)}</li>
+                        <li><strong>Argument of Perigee:</strong> ${getTLEPart(tle2, 34, 42)} degrees</li>
+                        <li><strong>Mean Anomaly:</strong> ${getTLEPart(tle2, 43, 51)} degrees</li>
+                        <li><strong>Mean Motion:</strong> ${getTLEPart(tle2, 52, 63)} revs per day</li>
+                        <li><strong>Revolution Number at Epoch:</strong> ${getTLEPart(tle2, 63, 68)}</li>
+                    </ul>
                 `;
                 resultsDiv.innerHTML += satelliteInfo;
             } else {
                 resultsDiv.innerHTML = '<p>No satellites found matching your search.</p>';
             }
         }
+
+        function getTLEPart(tle, start, end) {
+            return tle.substring(start, end).trim();
+        }
     </script>
 </body>
 </html>
 
-      
-            
-   
-              
-              
+       
