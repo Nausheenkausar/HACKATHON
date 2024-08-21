@@ -13,7 +13,12 @@ Satellite searching
             margin: 0;
             padding: 20px;
             text-align: center;
-            background-color: #f4f4f4;
+            background-image: url('backweb.jpg'); /* Replace 'your-background-image.jpg' with the path to your background image */
+            background-size: cover; /* Ensures the background image covers the entire viewport */
+            background-attachment: fixed; /* Keeps the background image fixed in place */
+            background-position: center; /* Centers the background image */
+            background-repeat: no-repeat; /* Prevents the background image from repeating */
+            color: white; /* Ensures text is readable on the background */
         }
 
         .search-container {
@@ -35,7 +40,7 @@ Satellite searching
             margin-left: 10px;
             border: none;
             background-color: #007BFF;
-            color: white;
+            color: black;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -52,21 +57,22 @@ Satellite searching
         }
 
         #results h2 {
-            color: #333;
+            color: black; /* Change text color to white for better readability */
         }
 
         #results p {
-            background: #e0e0e0;
+            background: rgba(224, 224, 224, 0.8); /* Semi-transparent background for better readability */
             padding: 10px;
             border-radius: 4px;
             text-align: left;
+            color: black;
         }
     </style>
 </head>
 <body>
-    <h1 style="color: rgb(0, 0, 115); font-size: 50px;">Welcome to the Space Station Discoverer</h1>
-    <h2>Using this website, you can find various satellites and space stations orbiting around us.</h2>
-    <img src="spaceimage.jpg" style="width: 800px; height: 600px;">
+    <h1 style="color: rgb(0, 0, 115); font-size: 50px;">Welcome to the Satellite Discoverer</h1>
+    <h2>Using this website, you can find various satellites  orbiting around us.</h2>
+    
     
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Enter Satellite Catalog Number...">
@@ -75,33 +81,45 @@ Satellite searching
     <div id="results"></div>
 
     <script>
+        // Function to search for a satellite using its Catalog Number
         function searchSatellite() {
+            // Get the value entered in the search input field
             const query = document.getElementById('searchInput').value.trim();
+
+            // Construct the URL for the CelesTrak API with the entered Catalog Number
             const url = `https://celestrak.com/NORAD/elements/gp.php?CATNR=${query}`;
 
+            // Use the Fetch API to retrieve the TLE data for the specified satellite
             fetch(url)
-                .then(response => response.text())
+                .then(response => response.text()) // Convert the response to text
                 .then(data => {
+                    // Check if data was returned
                     if (data) {
-                        displayResults(data);
+                        displayResults(data); // Display the results if data is present
                     } else {
+                        // Display a message if no data was found for the specified Catalog Number
                         document.getElementById('results').innerHTML = '<p>No satellites found matching your search.</p>';
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => console.error('Error:', error)); // Log any errors in the console
         }
 
+        // Function to display the satellite information in a more understandable format
         function displayResults(data) {
+            // Select the 'results' div to display the output
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
+            resultsDiv.innerHTML = ''; // Clear any previous results
 
+            // Split the retrieved TLE data into separate lines
             const lines = data.trim().split('\n');
 
+            // Check if we have at least three lines of data (Name, TLE Line 1, TLE Line 2)
             if (lines.length >= 3) {
-                const name = lines[0].trim();
-                const tle1 = lines[1].trim();
-                const tle2 = lines[2].trim();
+                const name = lines[0].trim(); // The first line is the satellite's name
+                const tle1 = lines[1].trim(); // The second line is the first part of the TLE data
+                const tle2 = lines[2].trim(); // The third line is the second part of the TLE data
 
+                // Construct the HTML to display the satellite's name and key orbital elements
                 const satelliteInfo = `
                     <h2>Satellite Name: ${name}</h2>
                     <p><strong>Two-Line Element Set (TLE):</strong></p>
@@ -118,17 +136,22 @@ Satellite searching
                         <li><strong>Revolution Number at Epoch:</strong> ${getTLEPart(tle2, 63, 68)}</li>
                     </ul>
                 `;
+                // Add the constructed satellite info to the results div
                 resultsDiv.innerHTML += satelliteInfo;
             } else {
+                // If there are not enough lines of data, display a message indicating no data was found
                 resultsDiv.innerHTML = '<p>No satellites found matching your search.</p>';
             }
         }
 
+        // Helper function to extract and trim a specific part of the TLE data
         function getTLEPart(tle, start, end) {
+            // Substring the TLE data between the specified start and end indices and trim any whitespace
             return tle.substring(start, end).trim();
         }
     </script>
 </body>
 </html>
+
 
        
