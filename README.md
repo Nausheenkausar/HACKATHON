@@ -13,12 +13,30 @@ Satellite searching
             margin: 0;
             padding: 20px;
             text-align: center;
-            background-image: url('backweb.jpg'); /* Replace 'your-background-image.jpg' with the path to your background image */
+            background-image: url('backweb.jpg'); /* Replace with your background image */
             background-size: cover; /* Ensures the background image covers the entire viewport */
             background-attachment: fixed; /* Keeps the background image fixed in place */
             background-position: center; /* Centers the background image */
             background-repeat: no-repeat; /* Prevents the background image from repeating */
             color: white; /* Ensures text is readable on the background */
+        }
+
+        h1 {
+            color: #ffffff; /* White text color for better readability */
+            font-size: 50px;
+            font-weight: bold;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds a shadow to the text */
+            background: linear-gradient(45deg, rgba(0, 0, 115, 0.8), rgba(255, 255, 255, 0.4)); /* Gradient background */
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            animation: fadeIn 3s ease-in-out; /* Fade-in animation */
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 10px 0;
         }
 
         .search-container {
@@ -40,7 +58,7 @@ Satellite searching
             margin-left: 10px;
             border: none;
             background-color: #007BFF;
-            color: black;
+            color: white;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -57,21 +75,54 @@ Satellite searching
         }
 
         #results h2 {
-            color: black; /* Change text color to white for better readability */
+            color: #ffffff;
         }
 
         #results p {
-            background: rgba(224, 224, 224, 0.8); /* Semi-transparent background for better readability */
+            background: rgba(200, 200, 224, 0.8); /* Semi-transparent background for better readability */
             padding: 10px;
             border-radius: 4px;
             text-align: left;
             color: black;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1 style="color: rgb(0, 0, 115); font-size: 50px;">Welcome to the Satellite Discoverer</h1>
-    <h2>Using this website, you can find various satellites  orbiting around us.</h2>
+    <h1>Welcome to the Satellite tracker</h1>
+    <h2>Using this website, you can find various satellites and space stations orbiting around us.</h2>
+<style>
+        
+    h2 {
+        color: black;
+    }
+
+    </style>
+<!-- Sidebar with list of Indian satellites -->
+<div class="sidebar">
+    <h3>Indian Satellites</h3>
+
+    <ul style="color: black; list-style-type: none; padding: 0;">
+        <li>Aryabhata</li>
+        <li>Bhaskara-I</li>
+        <li>INSAT-3DR</li>
+        <li>GSAT-19</li>
+        <li>Cartosat-2</li>
+        <li>IRNSS-1A</li>
+        <li>Chandrayaan-2</li>
+        <li>Astrosat</li>
+        <li>NavIC</li>
+        <li>RISAT-2</li>
+    </ul>
+</div>
     
     
     <div class="search-container">
@@ -152,6 +203,3 @@ Satellite searching
     </script>
 </body>
 </html>
-
-
-       
