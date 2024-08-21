@@ -1,33 +1,24 @@
 # HACKATHON
 Satellite searching 
 //website construction 
-<h1 style="color: rgb(0, 0, 115);;font-size:50px;text-align:center;"> welcome to the space station discoverer </h1>
-<h2 style="text-align:center;">Using this website you can find various satellites and space stations roaming aroun us in an orbital.</h2>
-<img src="spaceimage.jpg" style="width:800px;height:600px;">
-<h1 style="color: rgb(0, 0, 115);;font-size:50px;text-align:center;"> welcome to the space station discoverer </h1>
-<h2 style="text-align:center;">Using this website you can find various satellites and space stations roaming aroun us in an orbital.</h2>
-<img src="spaceimage.jpg" style="width:800px;height:600px;">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NASA Satellite Tracker</title>
+    <title>Satellite Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 20px;
+            text-align: center;
             background-color: #f4f4f4;
         }
 
         .search-container {
-            display: flex;
-            align-items: center;
+            display: inline-block;
+            margin-top: 20px;
         }
 
         input[type="text"] {
@@ -56,7 +47,12 @@ Satellite searching
         #results {
             margin-top: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #results h2 {
+            color: #333;
         }
 
         #results p {
@@ -67,22 +63,29 @@ Satellite searching
     </style>
 </head>
 <body>
+    <h1 style="color: rgb(0, 0, 115); font-size: 50px;">Welcome to the Space Station Discoverer</h1>
+    <h2>Using this website, you can find various satellites and space stations orbiting around us.</h2>
+    <img src="spaceimage.jpg" style="width: 800px; height: 600px;">
+    
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Enter Satellite Name...">
+        <input type="text" id="searchInput" placeholder="Enter Satellite Catalogue no...">
         <button onclick="searchSatellite()">Search</button>
     </div>
     <div id="results"></div>
 
     <script>
         function searchSatellite() {
-            const query = document.getElementById('searchInput').value;
-            const apiKey = 'q4dODOUAu8BuY5vX7ef5zoCP59dR6c1jaFYPKwJt'; 
-            const url = `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${apiKey}&s=${query}`;
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const url = `https://celestrak.com/NORAD/elements/gp.php?CATNR=${query}`;
 
             fetch(url)
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
-                    displayResults(data);
+                    if (data) {
+                        displayResults(data);
+                    } else {
+                        document.getElementById('results').innerHTML = '<p>No satellites found matching your search.</p>';
+                    }
                 })
                 .catch(error => console.error('Error:', error));
         }
@@ -91,22 +94,29 @@ Satellite searching
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = '';
 
-            if (data.near_earth_objects && data.near_earth_objects.length > 0) {
-                data.near_earth_objects.forEach(satellite => {
-                    const satelliteInfo = `
-                        <h2>${satellite.name}</h2>
-                        <p>ID: ${satellite.id}</p>
-                        <p>NASA JPL URL: <a href="${satellite.nasa_jpl_url}" target="_blank">${satellite.nasa_jpl_url}</a></p>
-                        <p>Magnitude: ${satellite.absolute_magnitude_h}</p>
-                    `;
-                    resultsDiv.innerHTML += satelliteInfo;
-                });
+            const lines = data.trim().split('\n');
+
+            if (lines.length >= 3) {
+                const name = lines[0].trim();
+                const tle1 = lines[1].trim();
+                const tle2 = lines[2].trim();
+
+                const satelliteInfo = `
+                    <h2>${name}</h2>
+                    <p>TLE Line 1: ${tle1}</p>
+                    <p>TLE Line 2: ${tle2}</p>
+                `;
+                resultsDiv.innerHTML += satelliteInfo;
             } else {
-                resultsDiv.innerHTML = '<p>No satellites found.</p>';
+                resultsDiv.innerHTML = '<p>No satellites found matching your search.</p>';
             }
         }
     </script>
 </body>
 </html>
 
-
+      
+            
+   
+              
+              
